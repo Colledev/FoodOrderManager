@@ -1,20 +1,16 @@
-# Usar uma imagem do OpenJDK como base
+# mvn clean package -DskipTests
+
+# Use uma imagem base com JDK 17
 FROM openjdk:17-jdk-slim
 
-# Instalar Maven
-RUN apt-get update && apt-get install -y maven
-
-# Define o diretório de trabalho dentro do container
+# Defina o diretório de trabalho dentro do contêiner
 WORKDIR /app
 
-# Copia o conteúdo do projeto para o diretório de trabalho no container
-COPY . .
+# Copie o arquivo JAR da aplicação para o contêiner
+COPY target/food-ordermanager-0.0.1-SNAPSHOT.jar .
 
-# Compila o projeto usando Maven, ignorando os testes
-RUN mvn clean package -DskipTests
-
-# Expõe a porta que a aplicação vai rodar
+# Exponha a porta 8080
 EXPOSE 8080
 
 # Comando para rodar a aplicação Spring Boot
-ENTRYPOINT ["java", "-jar", "target/foodordermanager-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "food-ordermanager-0.0.1-SNAPSHOT.jar"]

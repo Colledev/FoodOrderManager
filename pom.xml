@@ -12,7 +12,7 @@
 	<artifactId>food-ordermanager</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>FoodOrderManager</name>
-	<description>ackend application for managing restaurant orders</description>
+	<description>Backend application for managing restaurant orders</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -58,6 +58,16 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.jboss.logging</groupId>
+			<artifactId>jboss-logging</artifactId>
+			<version>3.4.1.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>
