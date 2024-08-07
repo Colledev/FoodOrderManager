@@ -1,21 +1,14 @@
-package com.example.foodordermanager.model;
+package com.example.foodordermanager.product.dto;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
-public class ProductModel {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ProductDTO {
     private Long id;
-
     private String name;
     private String description;
     private double price;
     private String productCategory;
-    private String productImage;
+    private String imageUrl;
 
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -48,19 +41,19 @@ public class ProductModel {
         this.price = price;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     public String getProductCategory() {
         return productCategory;
     }
 
     public void setProductCategory(String productCategory) {
         this.productCategory = productCategory;
-    }
-
-    public String getProductImage() {
-        return productImage;
-    }
-
-    public void setProductImage(String productImage) {
-        this.productImage = productImage;
     }
 }

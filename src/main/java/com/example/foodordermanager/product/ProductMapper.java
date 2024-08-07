@@ -1,9 +1,8 @@
-package com.example.foodordermanager.adapter;
+package com.example.foodordermanager.product;
 
-import com.example.foodordermanager.dto.ProductDTO;
-import com.example.foodordermanager.entity.ProductEntity;
+import com.example.foodordermanager.product.dto.ProductDTO;
 
-public class ItemMapper {
+public class ProductMapper {
     public static ProductDTO mapToProductDTO(ProductEntity product) {
         ProductDTO productDTO = new ProductDTO();
         productDTO.setId(product.getId());
