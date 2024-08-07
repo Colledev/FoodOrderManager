@@ -16,7 +16,7 @@ services:
       SPRING_DATASOURCE_USERNAME: user
       SPRING_DATASOURCE_PASSWORD: password
     networks:
-      -  postgres-net
+      - postgres-net
 
   db:
     image: postgres:13
@@ -29,7 +29,7 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     networks:
-      -  postgres-net
+      - postgres-net
 
 volumes:
   postgres-data:
