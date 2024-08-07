@@ -1,7 +1,6 @@
-package com.example.foodordermanager.controller;
+package com.example.foodordermanager.product;
 
-import com.example.foodordermanager.dto.ProductDTO;
-import com.example.foodordermanager.service.ProductService;
+import com.example.foodordermanager.product.dto.ProductDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

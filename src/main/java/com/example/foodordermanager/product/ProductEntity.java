@@ -1,4 +1,4 @@
-package com.example.foodordermanager.entity;
+package com.example.foodordermanager.product;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -68,4 +68,6 @@ public class ProductEntity {
     public void setProductImage(String productImage) {
         this.productImage = productImage;
     }
+
+
 }

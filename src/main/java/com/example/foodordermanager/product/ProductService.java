@@ -1,9 +1,6 @@
-package com.example.foodordermanager.service;
+package com.example.foodordermanager.product;
 
-import com.example.foodordermanager.dto.ProductDTO;
-import com.example.foodordermanager.entity.ProductEntity;
-import com.example.foodordermanager.repository.ProductRepository;
-import com.example.foodordermanager.adapter.ItemMapper;
+import com.example.foodordermanager.product.dto.ProductDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,30 +15,30 @@ public class ProductService {
 
     public List<ProductDTO> getAllProducts() {
         return productRepository.findAll().stream()
-                .map(ItemMapper::mapToProductDTO)
+                .map(ProductMapper::mapToProductDTO)
                 .collect(Collectors.toList());
     }
 
     public List<ProductDTO> createProducts(List<ProductDTO> productDTOs) {
         List<ProductEntity> products = productDTOs.stream()
-                .map(ItemMapper::mapToProduct)
+                .map(ProductMapper::mapToProduct)
                 .collect(Collectors.toList());
         List<ProductEntity> savedProducts = productRepository.saveAll(products);
         return savedProducts.stream()
-                .map(ItemMapper::mapToProductDTO)
+                .map(ProductMapper::mapToProductDTO)
                 .collect(Collectors.toList());
     }
 
     public ProductDTO createProduct(ProductDTO productDTO) {
-        ProductEntity product = ItemMapper.mapToProduct(productDTO);
+        ProductEntity product = ProductMapper.mapToProduct(productDTO);
         ProductEntity savedProduct = productRepository.save(product);
-        return ItemMapper.mapToProductDTO(savedProduct);
+        return ProductMapper.mapToProductDTO(savedProduct);
     }
 
     public ProductDTO updateProduct(ProductDTO productDTO) {
-        ProductEntity product = ItemMapper.mapToProduct(productDTO);
+        ProductEntity product = ProductMapper.mapToProduct(productDTO);
         ProductEntity updatedProduct = productRepository.save(product);
-        return ItemMapper.mapToProductDTO(updatedProduct);
+        return ProductMapper.mapToProductDTO(updatedProduct);
     }
 
     public void deleteProduct(Long id) {
