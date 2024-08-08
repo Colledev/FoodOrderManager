@@ -1,6 +1,7 @@
 package com.example.foodordermanager.product;
 
 import com.example.foodordermanager.product.dto.ProductDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ public class ProductController {
 
     private static final Logger log = LoggerFactory.getLogger(ProductController.class);
 
+    @Autowired
     private ProductService productService;
 
     @PostMapping
