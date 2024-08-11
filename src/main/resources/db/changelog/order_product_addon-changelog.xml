@@ -6,28 +6,30 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
     <changeSet id="1" author="Colledev">
-        <createTable tableName="product_addon">
-            <column name="product_id" type="BIGINT">
+        <createTable tableName="order_product_addon">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="order_product_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
             <column name="addon_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
+            <column name="quantity" type="INT">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
 
-        <addPrimaryKey columnNames="product_id, addon_id"
-                       constraintName="pk_product_addon"
-                       tableName="product_addon"/>
-
-        <addForeignKeyConstraint baseColumnNames="product_id"
-                                 baseTableName="product_addon"
-                                 constraintName="fk_product_addon_product"
+        <addForeignKeyConstraint baseColumnNames="order_product_id"
+                                 baseTableName="order_product_addon"
+                                 constraintName="fk_order_product_addon_order_product"
                                  referencedColumnNames="id"
-                                 referencedTableName="product"/>
+                                 referencedTableName="order_product"/>
 
         <addForeignKeyConstraint baseColumnNames="addon_id"
-                                 baseTableName="product_addon"
-                                 constraintName="fk_product_addon_addon"
+                                 baseTableName="order_product_addon"
+                                 constraintName="fk_order_product_addon_addon"
                                  referencedColumnNames="id"
                                  referencedTableName="addon"/>
     </changeSet>

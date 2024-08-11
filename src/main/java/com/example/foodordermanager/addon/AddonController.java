@@ -1,6 +1,7 @@
 package com.example.foodordermanager.addon;
 
 import com.example.foodordermanager.addon.dto.AddonDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ public class AddonController {
 
     private static final Logger log = LoggerFactory.getLogger(AddonController.class);
 
+    @Autowired
     private AddonService addonService;
 
     @GetMapping
