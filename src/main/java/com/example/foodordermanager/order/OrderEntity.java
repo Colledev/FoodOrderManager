@@ -1,8 +1,9 @@
 package com.example.foodordermanager.order;
 
+import com.example.foodordermanager.orderproduct.OrderProductEntity;
 import jakarta.persistence.*;
-
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -14,9 +15,13 @@ public class OrderEntity {
 
     private String customerName;
 
-    private String orderStatus;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
 
     private BigDecimal priceTotal;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<OrderProductEntity> orderProducts;
 
     public OrderEntity() {
     }
@@ -38,11 +43,11 @@ public class OrderEntity {
         this.customerName = customerName;
     }
 
-    public String getOrderStatus() {
+    public OrderStatus getOrderStatus() {
         return orderStatus;
     }
 
-    public void setOrderStatus(String orderStatus) {
+    public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
 
@@ -53,4 +58,13 @@ public class OrderEntity {
     public void setPriceTotal(BigDecimal priceTotal) {
         this.priceTotal = priceTotal;
     }
+
+    public List<OrderProductEntity> getOrderProducts() {
+        return orderProducts;
+    }
+
+    public void setOrderProducts(List<OrderProductEntity> orderProducts) {
+        this.orderProducts = orderProducts;
+    }
+
 }
