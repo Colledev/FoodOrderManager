@@ -18,4 +18,11 @@ public class OrderProductController {
         OrderProductDTO createdOrderProduct = orderProductService.createOrderProduct(orderProductDTO);
         return new ResponseEntity<>(createdOrderProduct, HttpStatus.CREATED);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteOrderProduct(@PathVariable Long id) {
+        orderProductService.deleteOrderProductAndUpdatePrice(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }

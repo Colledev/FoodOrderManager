@@ -5,12 +5,22 @@ import java.util.List;
 
 public class OrderProductDTO {
 
+    private Long Id;
     private Long orderId;
     private Long productId;
     private Integer quantity;
+    private String productName;
     private List<OrderProductAddonDTO> addons;
 
     // Getters and Setters
+
+    public Long getId() {
+        return Id;
+    }
+
+    public void setId(Long Id) {
+        this.Id = Id;
+    }
 
     public Long getOrderId() {
         return orderId;
@@ -34,6 +44,14 @@ public class OrderProductDTO {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public List<OrderProductAddonDTO> getAddons() {
