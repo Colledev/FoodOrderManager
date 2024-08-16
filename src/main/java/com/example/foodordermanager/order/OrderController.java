@@ -1,6 +1,8 @@
 package com.example.foodordermanager.order;
 
 import com.example.foodordermanager.order.dto.OrderDTO;
+import com.example.foodordermanager.order.dto.OrderDetailsDTO;
+import com.example.foodordermanager.order.dto.OrderStatusUpdateDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,10 @@ public class OrderController {
     @PostMapping("/create")
     public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO) {
         try {
+            if (!isValidStatus(orderDTO.getOrderStatus())) {
+                return ResponseEntity.badRequest().body(null);
+            }
+
             log.info("Received request to create order: {}", orderDTO);
             OrderDTO createdOrder = orderService.createOrder(orderDTO);
             log.info("Created order: {}", createdOrder);
@@ -43,6 +49,41 @@ public class OrderController {
         } catch (Exception e) {
             log.error("Error occurred while creating order", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<OrderDTO> updateOrderStatus(@PathVariable Long id, @RequestBody OrderStatusUpdateDTO orderStatusUpdateDTO) {
+        try {
+            log.info("Received request to update order status by id: {}", id);
+            OrderDTO updatedOrder = orderService.updateOrderStatus(id, orderStatusUpdateDTO.getOrderStatus());
+            log.info("Updated order: {}", updatedOrder);
+            return ResponseEntity.ok(updatedOrder);
+        } catch (Exception e) {
+            log.error("Error occurred while updating order status", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<OrderDetailsDTO> getOrderById(@PathVariable Long id) {
+        try {
+            log.info("Received request to get order by id: {}", id);
+            OrderDetailsDTO order = orderService.getOrderDetails(id);
+            log.info("Fetched order: {}", order);
+            return ResponseEntity.ok(order);
+        } catch (Exception e) {
+            log.error("Error occurred while getting order by id", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    private boolean isValidStatus(String status) {
+        try {
+            OrderStatus.valueOf(status);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
         }
     }
 }
