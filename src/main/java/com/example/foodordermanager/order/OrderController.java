@@ -1,8 +1,6 @@
 package com.example.foodordermanager.order;
 
-import com.example.foodordermanager.order.dto.OrderDTO;
-import com.example.foodordermanager.order.dto.OrderDetailsDTO;
-import com.example.foodordermanager.order.dto.OrderStatusUpdateDTO;
+import com.example.foodordermanager.order.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +59,19 @@ public class OrderController {
             return ResponseEntity.ok(updatedOrder);
         } catch (Exception e) {
             log.error("Error occurred while updating order status", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @GetMapping("/table/{tableNumber}/close")
+    public ResponseEntity<OrderTableDTO> closeTable(@PathVariable Integer tableNumber) {
+        try {
+            log.info("Closing table and fetching orders by table number: {}", tableNumber);
+            OrderTableDTO OrderTable = orderService.getOrdersByTableNumberGroupedByCustomer(tableNumber);
+            log.info("Fetched customer orders: {}", OrderTable);
+            return ResponseEntity.ok(OrderTable);
+        } catch (Exception e) {
+            log.error("Error occurred while closing table", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
