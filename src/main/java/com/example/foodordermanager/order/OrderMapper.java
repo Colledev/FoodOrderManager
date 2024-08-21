@@ -48,21 +48,25 @@ public class OrderMapper {
                 .map(orderProductEntity -> {
                     OrderProductDTO orderProductDTO = new OrderProductDTO();
                     orderProductDTO.setOrderId(orderEntity.getId());
-                    orderProductDTO.setId(orderProductEntity.getId());
                     orderProductDTO.setProductId(orderProductEntity.getProduct().getId());
                     orderProductDTO.setQuantity(orderProductEntity.getQuantity());
 
-                    String productName = orderProductEntity.getProduct().getName();
-                    orderProductDTO.setProductName(productName);
+                    BigDecimal productUnitPrice = orderProductEntity.getProduct().getPrice();
+
+                    BigDecimal productTotalPrice = productUnitPrice.multiply(BigDecimal.valueOf(orderProductDTO.getQuantity()));
+                    orderProductDTO.setPrice(productTotalPrice);
 
                     List<OrderProductAddonDTO> orderProductAddonDTOS = orderProductEntity.getAddons().stream()
                             .map(orderProductAddonEntity -> {
                                 OrderProductAddonDTO orderProductAddonDTO = new OrderProductAddonDTO();
                                 orderProductAddonDTO.setAddonId(orderProductAddonEntity.getAddon().getId());
+                                orderProductAddonDTO.setAddonName(orderProductAddonEntity.getAddon().getName());
                                 orderProductAddonDTO.setQuantity(orderProductAddonEntity.getQuantity());
 
-                                String addonName = orderProductAddonEntity.getAddon().getName();
-                                orderProductAddonDTO.setAddonName(addonName);
+                                BigDecimal addonUnitPrice = orderProductAddonEntity.getAddon().getPrice();
+
+                                BigDecimal addonTotalPrice = addonUnitPrice.multiply(BigDecimal.valueOf(orderProductAddonDTO.getQuantity()));
+                                orderProductAddonDTO.setPrice(addonTotalPrice);
 
                                 return orderProductAddonDTO;
                             })
@@ -78,6 +82,7 @@ public class OrderMapper {
 
         return orderDetailsDTO;
     }
+
 
     public static CustomerOrderDTO fromOrders(String customerName, List<OrderEntity> orders) {
         CustomerOrderDTO customerOrderDTO = new CustomerOrderDTO();

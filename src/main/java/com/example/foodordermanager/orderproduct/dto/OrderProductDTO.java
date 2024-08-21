@@ -1,6 +1,8 @@
 package com.example.foodordermanager.orderproduct.dto;
 
 import com.example.foodordermanager.orderproductaddon.dto.OrderProductAddonDTO;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 public class OrderProductDTO {
@@ -8,6 +10,7 @@ public class OrderProductDTO {
     private Long orderId;
     private Long productId;
     private Integer quantity;
+    private BigDecimal price;
     private List<OrderProductAddonDTO> addons;
 
     // Getters and Setters
@@ -42,5 +45,13 @@ public class OrderProductDTO {
 
     public void setAddons(List<OrderProductAddonDTO> addons) {
         this.addons = addons;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 }
