@@ -52,6 +52,9 @@ public class OrderMapper {
                     orderProductDTO.setProductId(orderProductEntity.getProduct().getId());
                     orderProductDTO.setQuantity(orderProductEntity.getQuantity());
 
+                    BigDecimal productPrice = orderProductEntity.getProduct().getPrice().multiply(BigDecimal.valueOf(orderProductEntity.getQuantity()));
+                    orderProductDTO.setPrice(productPrice);
+
                     String productName = orderProductEntity.getProduct().getName();
                     orderProductDTO.setProductName(productName);
 
@@ -60,6 +63,9 @@ public class OrderMapper {
                                 OrderProductAddonDTO orderProductAddonDTO = new OrderProductAddonDTO();
                                 orderProductAddonDTO.setAddonId(orderProductAddonEntity.getAddon().getId());
                                 orderProductAddonDTO.setQuantity(orderProductAddonEntity.getQuantity());
+
+                                BigDecimal addonPrice = orderProductAddonEntity.getAddon().getPrice().multiply(BigDecimal.valueOf(orderProductAddonEntity.getQuantity()));
+                                orderProductAddonDTO.setPrice(addonPrice);
 
                                 String addonName = orderProductAddonEntity.getAddon().getName();
                                 orderProductAddonDTO.setAddonName(addonName);
