@@ -1,15 +1,17 @@
 package com.example.foodordermanager.addon.dto;
 
+import java.math.BigDecimal;
+
 public class AddonDTO {
 
     private Long id;
     private String name;
-    private Double price;
+    private BigDecimal price;
 
     public AddonDTO() {
     }
 
-    public AddonDTO(Long id, String name, Double price) {
+    public AddonDTO(Long id, String name, BigDecimal price) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -23,7 +25,7 @@ public class AddonDTO {
         return name;
     }
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
@@ -35,7 +37,7 @@ public class AddonDTO {
         this.name = name;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 }
