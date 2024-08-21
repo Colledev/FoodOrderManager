@@ -1,37 +1,46 @@
 package com.example.foodordermanager.productaddon.dto;
 
 import com.example.foodordermanager.addon.dto.AddonDTO;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 public class ProductAddonDTO {
-
-    private Long productId;
-    private String productName;
+    private Long id;
+    private String name;
+    private BigDecimal price;
     private List<AddonDTO> addons;
 
-    public ProductAddonDTO() {
-    }
-
-    public ProductAddonDTO(Long productId, String productName, List<AddonDTO> addons) {
-        this.productId = productId;
-        this.productName = productName;
+    public ProductAddonDTO(Long id, String name, BigDecimal price, List<AddonDTO> addons) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
         this.addons = addons;
     }
 
-    public Long getProductId() {
-        return productId;
+    // Getters e Setters
+    public Long getId() {
+        return id;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getName() {
+        return name;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     public List<AddonDTO> getAddons() {

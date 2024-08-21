@@ -24,14 +24,14 @@ public class ProductAddonMapper {
                 })
                 .collect(Collectors.toList());
 
-        return new ProductAddonDTO(product.getId(), product.getName(), addons);
+        return new ProductAddonDTO(product.getId(), product.getName(), product.getPrice(), addons);
     }
 
     public static ProductAddonEntity mapToProductAddon(ProductAddonDTO productAddonDTO) {
         ProductAddonEntity productAddonEntity = new ProductAddonEntity();
-        productAddonEntity.setProductId(productAddonDTO.getProductId());
+        productAddonEntity.setProductId(productAddonDTO.getId());
         if (!productAddonDTO.getAddons().isEmpty()) {
-            productAddonEntity.setAddonId(productAddonDTO.getAddons().get(0).getId()); // Ajuste conforme necessário
+            productAddonEntity.setAddonId(productAddonDTO.getAddons().get(0).getId());
         }
         return productAddonEntity;
     }
