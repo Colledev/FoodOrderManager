@@ -7,6 +7,7 @@ public class OrderDTO {
     private Long id;
     private String customerName;
     private String orderStatus;
+    private Integer tableNumber;
     private BigDecimal priceTotal;
 
     // Getters and Setters
@@ -40,5 +41,13 @@ public class OrderDTO {
 
     public void setPriceTotal(BigDecimal priceTotal) {
         this.priceTotal = priceTotal;
+    }
+
+    public Integer getTableNumber() {
+        return tableNumber;
+    }
+
+    public void setTableNumber(Integer tableNumber) {
+        this.tableNumber = tableNumber;
     }
 }
