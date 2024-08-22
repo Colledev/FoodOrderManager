@@ -17,6 +17,7 @@
             <column name="price" type="DECIMAL(10, 2)"/>
             <column name="product_category" type="VARCHAR(255)"/>
             <column name="image_url" type="VARCHAR(255)"/>
+            <column name="active" type="BOOLEAN"/>
         </createTable>
     </changeSet>
 

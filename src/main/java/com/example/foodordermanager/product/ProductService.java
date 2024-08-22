@@ -19,15 +19,27 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
+    public List<ProductDTO> getActiveProducts() {
+        return productRepository.findByActiveTrue().stream()
+                .map(ProductMapper::mapToProductDTO)
+                .collect(Collectors.toList());
+    }
+
     public List<ProductDTO> createProducts(List<ProductDTO> productDTOs) {
         List<ProductEntity> products = productDTOs.stream()
-                .map(ProductMapper::mapToProduct)
+                .map(dto -> {
+                    if (dto.getActive() == null) {
+                        dto.setActive(false);
+                    }
+                    return ProductMapper.mapToProduct(dto);
+                })
                 .collect(Collectors.toList());
         List<ProductEntity> savedProducts = productRepository.saveAll(products);
         return savedProducts.stream()
                 .map(ProductMapper::mapToProductDTO)
                 .collect(Collectors.toList());
     }
+
 
     public ProductDTO createProduct(ProductDTO productDTO) {
         ProductEntity product = ProductMapper.mapToProduct(productDTO);
