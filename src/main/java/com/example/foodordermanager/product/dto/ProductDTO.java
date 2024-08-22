@@ -7,6 +7,7 @@ public class ProductDTO {
     private double price;
     private String productCategory;
     private String imageUrl;
+    private Boolean active;
 
     // Getters and Setters
     public Long getId() {
@@ -55,5 +56,13 @@ public class ProductDTO {
 
     public void setProductCategory(String productCategory) {
         this.productCategory = productCategory;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

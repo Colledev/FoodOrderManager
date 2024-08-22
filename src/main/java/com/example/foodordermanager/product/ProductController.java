@@ -46,6 +46,19 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/active")
+    public ResponseEntity<List<ProductDTO>> getActiveProducts() {
+        try {
+            log.info("Received request to get active products");
+            List<ProductDTO> products = productService.getActiveProducts();
+            log.info("Fetched active products: {}", products);
+            return ResponseEntity.ok(products);
+        } catch (Exception e) {
+            log.error("Error occurred while getting active products", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
+        }
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @RequestBody ProductDTO productDTO) {
         try {
