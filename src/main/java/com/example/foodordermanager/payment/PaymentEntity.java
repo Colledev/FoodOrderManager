@@ -1,5 +1,6 @@
 package com.example.foodordermanager.payment;
 
+import com.example.foodordermanager.order.OrderEntity;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -12,9 +13,14 @@ public class PaymentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String method;
+    @Enumerated(EnumType.STRING)
+    private PaymentMethod method;
 
     private BigDecimal amount;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private OrderEntity order;
 
     // Getters and Setters
 
@@ -26,11 +32,11 @@ public class PaymentEntity {
         this.id = id;
     }
 
-    public String getMethod() {
+    public PaymentMethod getMethod() {
         return method;
     }
 
-    public void setMethod(String method) {
+    public void setMethod(PaymentMethod method) {
         this.method = method;
     }
 
@@ -40,5 +46,13 @@ public class PaymentEntity {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
+    }
+
+    public OrderEntity getOrder() {
+        return order;
+    }
+
+    public void setOrder(OrderEntity order) {
+        this.order = order;
     }
 }
