@@ -13,6 +13,7 @@
     <include file="db/changelog/product_addon-changelog.xml"/>
     <include file="db/changelog/customer-changelog.xml"/>
     <include file="db/changelog/tables-changelog.xml"/>
+    <include file="db/changelog/table_history-changelog.xml"/>
     <include file="db/changelog/payment-changelog.xml"/>
 
 
