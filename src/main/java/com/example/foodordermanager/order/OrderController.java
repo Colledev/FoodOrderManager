@@ -1,6 +1,7 @@
 package com.example.foodordermanager.order;
 
 import com.example.foodordermanager.order.dto.*;
+import com.example.foodordermanager.payment.dto.PaymentListDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +22,40 @@ public class OrderController {
     private OrderService orderService;
 
     @GetMapping
-    public ResponseEntity<List<OrderDTO>> getAllOrders() {
+    public ResponseEntity<List<OrderWithPayment>> getAllOrders() {
         try {
             log.info("Received request to get all orders");
-            List<OrderDTO> orders = orderService.getAllOrders();
+            List<OrderWithPayment> orders = orderService.getAllOrders();
             log.info("Fetched orders: {}", orders);
             return ResponseEntity.ok(orders);
         } catch (Exception e) {
             log.error("Error occurred while getting all orders", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
+        }
+    }
+
+    @GetMapping("/completed")
+    public ResponseEntity<List<OrderWithPayment>> getAllOrdersConcluded() {
+        try {
+            log.info("Received request to get all concluded orders");
+            List<OrderWithPayment> orders = orderService.getAllOrdersConcluded();
+            log.info("Fetched concluded orders: {}", orders);
+            return ResponseEntity.ok(orders);
+        } catch (Exception e) {
+            log.error("Error occurred while getting all concluded orders", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
+        }
+    }
+
+    @GetMapping("/open")
+    public ResponseEntity<List<OrderWithPayment>> getAllOrdersOpen() {
+        try {
+            log.info("Received request to get all open orders");
+            List<OrderWithPayment> orders = orderService.getAllOrdersOpen();
+            log.info("Fetched open orders: {}", orders);
+            return ResponseEntity.ok(orders);
+        } catch (Exception e) {
+            log.error("Error occurred while getting all open orders", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
         }
     }
@@ -86,6 +113,18 @@ public class OrderController {
         } catch (Exception e) {
             log.error("Error occurred while getting order by id", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PostMapping("/{id}/payment")
+    public ResponseEntity<String> processPayments(@PathVariable Long id, @RequestBody PaymentListDTO paymentListDTO) {
+        try {
+            orderService.processPayments(id, paymentListDTO.getPayments());
+            return ResponseEntity.ok("Payment processed successfully");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing the payment");
         }
     }
 

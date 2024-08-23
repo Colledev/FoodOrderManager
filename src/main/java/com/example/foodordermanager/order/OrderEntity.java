@@ -6,6 +6,7 @@ import com.example.foodordermanager.table.TableEntity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.security.core.parameters.P;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -28,9 +29,8 @@ public class OrderEntity {
 
     private BigDecimal priceTotal;
 
-    @ManyToOne
-    @JoinColumn(name = "payment_id")
-    private PaymentEntity payment;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<PaymentEntity> payment;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<OrderProductEntity> orderProducts;
@@ -103,11 +103,11 @@ public class OrderEntity {
         this.updatedAt = updatedAt;
     }
 
-    public PaymentEntity getPayment() {
+    public List<PaymentEntity> getPayment() {
         return payment;
     }
 
-    public void setPayment(PaymentEntity payment) {
+    public void setPayment(List<PaymentEntity> payment) {
         this.payment = payment;
     }
 

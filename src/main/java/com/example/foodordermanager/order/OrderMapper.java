@@ -1,13 +1,11 @@
 package com.example.foodordermanager.order;
 
-import com.example.foodordermanager.order.dto.CustomerOrderDTO;
-import com.example.foodordermanager.order.dto.OrderDTO;
-import com.example.foodordermanager.order.dto.OrderDetailsDTO;
-import com.example.foodordermanager.order.dto.OrderTableDTO;
+import com.example.foodordermanager.order.dto.*;
 import com.example.foodordermanager.orderproduct.OrderProductEntity;
 import com.example.foodordermanager.orderproduct.OrderProductMapper;
 import com.example.foodordermanager.orderproduct.dto.OrderProductDTO;
 import com.example.foodordermanager.orderproductaddon.dto.OrderProductAddonDTO;
+import com.example.foodordermanager.payment.PaymentEntity;
 import com.example.foodordermanager.product.ProductMapper;
 import com.example.foodordermanager.table.TableEntity;
 
@@ -36,6 +34,23 @@ public class OrderMapper {
         order.setOrderStatus(OrderStatus.valueOf(orderDTO.getOrderStatus()));
         order.setPriceTotal(orderDTO.getPriceTotal());
         return order;
+    }
+
+    public static OrderWithPayment toOrderWithPayment(OrderEntity orderEntity) {
+        OrderWithPayment orderWithPayment = new OrderWithPayment();
+        orderWithPayment.setId(orderEntity.getId());
+        orderWithPayment.setCustomerName(orderEntity.getCustomerName());
+        orderWithPayment.setOrderStatus(orderEntity.getOrderStatus().name());
+        orderWithPayment.setTableNumber(orderEntity.getTable().getNumber());
+        orderWithPayment.setPriceTotal(orderEntity.getPriceTotal());
+
+        BigDecimal totalPaid = orderEntity.getPayment().stream()
+                .map(PaymentEntity::getAmount)
+                        .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        orderWithPayment.setTotalPaid(totalPaid);
+
+        return orderWithPayment;
     }
 
     public static OrderDetailsDTO toOrderDetailsDTO(OrderEntity orderEntity) {
