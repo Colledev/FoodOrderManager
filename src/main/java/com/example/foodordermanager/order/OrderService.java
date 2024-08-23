@@ -14,10 +14,15 @@ import com.example.foodordermanager.payment.dto.PaymentDTO;
 import com.example.foodordermanager.product.dto.ProductDTO;
 import com.example.foodordermanager.table.TableEntity;
 import com.example.foodordermanager.table.TableRepository;
+import com.example.foodordermanager.table.TableService;
+import com.example.foodordermanager.table.dto.TableStatusDTO;
+import com.example.foodordermanager.tablehistory.TableHistoryEntity;
+import com.example.foodordermanager.tablehistory.TableHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +42,12 @@ public class OrderService {
 
     @Autowired
     private PaymentRepository paymentRepository;
+
+    @Autowired
+    private TableService tableService;
+
+    @Autowired
+    private TableHistoryRepository tableHistoryRepository;
 
     public void updateOrderTotalPrice(Long orderId) {
         OrderEntity order = findById(orderId);
@@ -88,6 +99,11 @@ public class OrderService {
         OrderEntity order = OrderMapper.mapToOrder(orderDTO, tableEntity);
 
         OrderEntity savedOrder = orderRepository.save(order);
+
+        if (order.getTable().getAvailable()) {
+            order.getTable().setAvailable(false);
+            tableRepository.save(tableEntity);
+        }
 
         return OrderMapper.mapToOrderDTO(savedOrder);
     }
@@ -183,8 +199,20 @@ public class OrderService {
             order.setOrderStatus(OrderStatus.COMPLETED);
             order.setPriceTotal(BigDecimal.ZERO);
 
-        }
+            TableEntity table = order.getTable();
+            table.setAvailable(true);
 
+            TableHistoryEntity history = tableHistoryRepository.findByTableAndReleasedAtIsNull(table);
+            if (history != null) {
+                history.setReleasedAt(LocalDateTime.now());
+                tableHistoryRepository.save(history);
+            } else {
+                System.out.println("No open TableHistory found for table: " + table.getId());
+            }
+
+            table.setCustomer(null);
+            tableRepository.save(table);
+        }
         orderRepository.save(order);
     }
 
