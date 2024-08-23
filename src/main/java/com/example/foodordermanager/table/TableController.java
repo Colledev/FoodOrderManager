@@ -6,12 +6,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/tables")
 public class TableController {
 
     @Autowired
     private TableService tableService;
+
+    @GetMapping
+    public ResponseEntity<List<TableDTO>> getAllTables() {
+        List<TableDTO> tables = tableService.getAllTables();
+        return ResponseEntity.ok(tables);
+    }
+
+    @GetMapping("/available")
+    public ResponseEntity<List<TableDTO>> getAllAvailableTables() {
+        List<TableDTO> tables = tableService.getAllAvailableTable();
+        return ResponseEntity.ok(tables);
+    }
+
+    @GetMapping("/not-available")
+    public ResponseEntity<List<TableDTO>> getAllNotAvailableTables() {
+        List<TableDTO> tables = tableService.getAllNotAvailableTable();
+        return ResponseEntity.ok(tables);
+    }
 
     @PostMapping("/create")
     public ResponseEntity<TableDTO> createTable(@RequestBody TableDTO tableDTO) {
