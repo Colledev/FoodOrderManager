@@ -6,6 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "addon")
 public class AddonEntity {
@@ -15,7 +17,7 @@ public class AddonEntity {
         private Long id;
 
         private String name;
-        private double price;
+        private BigDecimal price;
 
         // Getters and Setters
         public Long getId() {
@@ -34,11 +36,11 @@ public class AddonEntity {
             this.name = name;
         }
 
-        public double getPrice() {
+        public BigDecimal getPrice() {
             return price;
         }
 
-        public void setPrice(double price) {
+        public void setPrice(BigDecimal price) {
             this.price = price;
         }
 }

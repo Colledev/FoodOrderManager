@@ -1,12 +1,15 @@
 package com.example.foodordermanager.product.dto;
 
+import java.math.BigDecimal;
+
 public class ProductDTO {
     private Long id;
     private String name;
     private String description;
-    private double price;
+    private BigDecimal price;
     private String productCategory;
     private String imageUrl;
+    private Boolean active;
 
     // Getters and Setters
     public Long getId() {
@@ -33,11 +36,11 @@ public class ProductDTO {
         this.description = description;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -55,5 +58,13 @@ public class ProductDTO {
 
     public void setProductCategory(String productCategory) {
         this.productCategory = productCategory;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

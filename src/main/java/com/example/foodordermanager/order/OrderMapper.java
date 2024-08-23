@@ -63,27 +63,25 @@ public class OrderMapper {
                 .map(orderProductEntity -> {
                     OrderProductDTO orderProductDTO = new OrderProductDTO();
                     orderProductDTO.setOrderId(orderEntity.getId());
-                    orderProductDTO.setId(orderProductEntity.getId());
                     orderProductDTO.setProductId(orderProductEntity.getProduct().getId());
                     orderProductDTO.setQuantity(orderProductEntity.getQuantity());
 
-                    BigDecimal productPrice = orderProductEntity.getProduct().getPrice().multiply(BigDecimal.valueOf(orderProductEntity.getQuantity()));
-                    orderProductDTO.setPrice(productPrice);
+                    BigDecimal productUnitPrice = orderProductEntity.getProduct().getPrice();
 
-                    String productName = orderProductEntity.getProduct().getName();
-                    orderProductDTO.setProductName(productName);
-
+                    BigDecimal productTotalPrice = productUnitPrice.multiply(BigDecimal.valueOf(orderProductDTO.getQuantity()));
+                    orderProductDTO.setPrice(productTotalPrice);
+                  
                     List<OrderProductAddonDTO> orderProductAddonDTOS = orderProductEntity.getAddons().stream()
                             .map(orderProductAddonEntity -> {
                                 OrderProductAddonDTO orderProductAddonDTO = new OrderProductAddonDTO();
                                 orderProductAddonDTO.setAddonId(orderProductAddonEntity.getAddon().getId());
+                                orderProductAddonDTO.setAddonName(orderProductAddonEntity.getAddon().getName());
                                 orderProductAddonDTO.setQuantity(orderProductAddonEntity.getQuantity());
 
-                                BigDecimal addonPrice = orderProductAddonEntity.getAddon().getPrice().multiply(BigDecimal.valueOf(orderProductAddonEntity.getQuantity()));
-                                orderProductAddonDTO.setPrice(addonPrice);
+                                BigDecimal addonUnitPrice = orderProductAddonEntity.getAddon().getPrice();
 
-                                String addonName = orderProductAddonEntity.getAddon().getName();
-                                orderProductAddonDTO.setAddonName(addonName);
+                                BigDecimal addonTotalPrice = addonUnitPrice.multiply(BigDecimal.valueOf(orderProductAddonDTO.getQuantity()));
+                                orderProductAddonDTO.setPrice(addonTotalPrice);
 
                                 return orderProductAddonDTO;
                             })
@@ -99,6 +97,7 @@ public class OrderMapper {
 
         return orderDetailsDTO;
     }
+
 
     public static CustomerOrderDTO fromOrders(String customerName, List<OrderEntity> orders) {
         CustomerOrderDTO customerOrderDTO = new CustomerOrderDTO();

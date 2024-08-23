@@ -1,10 +1,8 @@
 package com.example.foodordermanager.product;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "product")
@@ -16,9 +14,10 @@ public class ProductEntity {
 
     private String name;
     private String description;
-    private double price;
+    private BigDecimal price;
     private String productCategory;
     private String productImage;
+    private Boolean active = false;
 
     // Getters and Setters
     public Long getId() {
@@ -45,11 +44,11 @@ public class ProductEntity {
         this.description = description;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -69,5 +68,11 @@ public class ProductEntity {
         this.productImage = productImage;
     }
 
+    public Boolean getActive() {
+        return active;
+    }
 
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 }
