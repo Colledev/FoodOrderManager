@@ -6,16 +6,14 @@ public class PaymentMapper {
 
     public static PaymentDTO mapToPaymentDTO(PaymentEntity payment) {
         PaymentDTO dto = new PaymentDTO();
-        dto.setId(payment.getId());
-        dto.setMethod(payment.getMethod());
+        dto.setMethod(payment.getMethod().name());
         dto.setAmount(payment.getAmount());
         return dto;
     }
 
     public static PaymentEntity mapToPayment(PaymentDTO payment) {
         PaymentEntity entity = new PaymentEntity();
-        entity.setId(payment.getId());
-        entity.setMethod(payment.getMethod());
+        entity.setMethod(PaymentMethod.valueOf(payment.getMethod()));
         entity.setAmount(payment.getAmount());
         return entity;
     }
