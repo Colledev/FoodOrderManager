@@ -1,14 +1,16 @@
 package com.example.foodordermanager.order;
 
-import com.example.foodordermanager.order.dto.CustomerOrderDTO;
-import com.example.foodordermanager.order.dto.OrderDTO;
-import com.example.foodordermanager.order.dto.OrderDetailsDTO;
-import com.example.foodordermanager.order.dto.OrderTableDTO;
+import com.example.foodordermanager.order.dto.*;
 import com.example.foodordermanager.orderproduct.OrderProductEntity;
 import com.example.foodordermanager.orderproduct.OrderProductRepository;
 import com.example.foodordermanager.orderproduct.dto.OrderProductDTO;
 import com.example.foodordermanager.orderproductaddon.OrderProductAddonEntity;
 import com.example.foodordermanager.orderproductaddon.dto.OrderProductAddonDTO;
+import com.example.foodordermanager.payment.PaymentEntity;
+import com.example.foodordermanager.payment.PaymentMapper;
+import com.example.foodordermanager.payment.PaymentMethod;
+import com.example.foodordermanager.payment.PaymentRepository;
+import com.example.foodordermanager.payment.dto.PaymentDTO;
 import com.example.foodordermanager.product.dto.ProductDTO;
 import com.example.foodordermanager.table.TableEntity;
 import com.example.foodordermanager.table.TableRepository;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -32,6 +35,9 @@ public class OrderService {
     @Autowired
     private TableRepository tableRepository;
 
+    @Autowired
+    private PaymentRepository paymentRepository;
+
     public void updateOrderTotalPrice(Long orderId) {
         OrderEntity order = findById(orderId);
         BigDecimal totalPrice = calculateTotalPrice(orderId);
@@ -39,10 +45,28 @@ public class OrderService {
         orderRepository.save(order);
     }
 
-    public List<OrderDTO> getAllOrders() {
-        return orderRepository.findAll().stream()
-                .map(OrderMapper::mapToOrderDTO)
-                .collect(Collectors.toList());
+    public List<OrderWithPayment> getAllOrders() {
+        List<OrderEntity> orders = orderRepository.findAll();
+        return orders.stream()
+                .map(OrderMapper::toOrderWithPayment)
+                .toList();
+    }
+
+    public List<OrderWithPayment> getAllOrdersConcluded() {
+        List<OrderEntity> orders = orderRepository.findAll();
+        return orders.stream()
+                .filter(order -> order.getOrderStatus() == OrderStatus.COMPLETED)
+                .map(OrderMapper::toOrderWithPayment)
+                .toList();
+    }
+
+    public List<OrderWithPayment> getAllOrdersOpen() {
+        List<OrderEntity> orders = orderRepository.findAll();
+        return orders.stream()
+                .filter(order -> order.getOrderStatus() == OrderStatus.AWAITING_PAYMENT ||
+                        order.getOrderStatus() == OrderStatus.IN_PRODUCTION)
+                .map(OrderMapper::toOrderWithPayment)
+                .toList();
     }
 
     public OrderDetailsDTO getOrderDetails(Long id) {
@@ -99,7 +123,6 @@ public class OrderService {
     }
 
 
-
     public OrderEntity findById(Long id) {
         return orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
     }
@@ -119,6 +142,50 @@ public class OrderService {
         }
 
         return OrderMapper.mapToOrderDTO(order);
+    }
+
+    public void processPayments(Long orderId, List<PaymentDTO> paymentDTOs) {
+        OrderEntity order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        if (order.getOrderStatus() != OrderStatus.AWAITING_PAYMENT) {
+            throw new IllegalArgumentException("Order is not awaiting payment");
+        }
+
+        BigDecimal totalPaid = order.getPayment().stream()
+                .map(PaymentEntity::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal paymentAmount = paymentDTOs.stream()
+                .map(PaymentDTO::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        if (paymentAmount.compareTo(order.getPriceTotal()) > 0) {
+            throw new IllegalArgumentException("Payment amount exceeds the total price");
+        }
+
+        for (PaymentDTO paymentDTO : paymentDTOs) {
+            PaymentEntity paymentEntity = PaymentMapper.mapToPayment(paymentDTO);
+            paymentEntity.setOrder(order);
+            paymentRepository.save(paymentEntity);
+        }
+
+        totalPaid = totalPaid.add(paymentAmount);
+
+        if (totalPaid.compareTo(order.getPriceTotal()) < 0) {
+            BigDecimal remaining = order.getPriceTotal().subtract(totalPaid);
+            order.setPriceTotal(remaining);
+            orderRepository.save(order);
+            throw new IllegalArgumentException("Payment is incomplete. Remaining: " + remaining);
+        }
+
+        if (totalPaid.compareTo(order.getPriceTotal()) >= 0) {
+            order.setOrderStatus(OrderStatus.COMPLETED);
+            order.setPriceTotal(BigDecimal.ZERO);
+
+        }
+
+        orderRepository.save(order);
     }
 
     private boolean isValidStatusTransition(OrderStatus currentStatus, OrderStatus newStatus) {
