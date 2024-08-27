@@ -37,6 +37,7 @@
             return ResponseEntity.ok(updatedCustomer);
         }
 
+        @PreAuthorize("hasRole('ADMIN') or hasRole('WAITER')")
         @GetMapping("name/{name}")
         public ResponseEntity<List<CustomerDTO>> getCustomersByName(@PathVariable String name) {
             List<CustomerDTO> customers = customerService.getCustomersByName(name);
