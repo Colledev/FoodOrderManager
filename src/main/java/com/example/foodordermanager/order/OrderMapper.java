@@ -64,6 +64,7 @@ public class OrderMapper {
                     OrderProductDTO orderProductDTO = new OrderProductDTO();
                     orderProductDTO.setOrderId(orderEntity.getId());
                     orderProductDTO.setProductId(orderProductEntity.getProduct().getId());
+                    orderProductDTO.setProductName(orderProductEntity.getProduct().getName());
                     orderProductDTO.setQuantity(orderProductEntity.getQuantity());
 
                     BigDecimal productUnitPrice = orderProductEntity.getProduct().getPrice();

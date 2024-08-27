@@ -2,9 +2,11 @@ package com.example.foodordermanager.order;
 
 import com.example.foodordermanager.order.dto.*;
 import com.example.foodordermanager.payment.dto.PaymentListDTO;
+import jakarta.annotation.security.PermitAll;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,7 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CASHIER')")
     @GetMapping
     public ResponseEntity<List<OrderWithPayment>> getAllOrders() {
         try {
@@ -34,6 +37,7 @@ public class OrderController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CASHIER')")
     @GetMapping("/completed")
     public ResponseEntity<List<OrderWithPayment>> getAllOrdersConcluded() {
         try {
@@ -47,6 +51,7 @@ public class OrderController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CASHIER')")
     @GetMapping("/open")
     public ResponseEntity<List<OrderWithPayment>> getAllOrdersOpen() {
         try {
@@ -60,6 +65,7 @@ public class OrderController {
         }
     }
 
+    @PermitAll
     @PostMapping("/create")
     public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO) {
         try {
@@ -77,6 +83,7 @@ public class OrderController {
         }
     }
 
+    @PermitAll
     @PutMapping("/{id}/status")
     public ResponseEntity<OrderDTO> updateOrderStatus(@PathVariable Long id, @RequestBody OrderStatusUpdateDTO orderStatusUpdateDTO) {
         try {
@@ -90,6 +97,7 @@ public class OrderController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CASHIER')")
     @GetMapping("/table/{tableNumber}/close")
     public ResponseEntity<OrderTableDTO> closeTable(@PathVariable Integer tableNumber) {
         try {
@@ -103,6 +111,7 @@ public class OrderController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CASHIER') or hasRole('KITCHEN')")
     @GetMapping("/{id}")
     public ResponseEntity<OrderDetailsDTO> getOrderById(@PathVariable Long id) {
         try {
@@ -116,6 +125,7 @@ public class OrderController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CASHIER')")
     @PostMapping("/{id}/payment")
     public ResponseEntity<String> processPayments(@PathVariable Long id, @RequestBody PaymentListDTO paymentListDTO) {
         try {

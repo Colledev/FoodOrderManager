@@ -9,6 +9,7 @@ public class OrderProductDTO {
 
     private Long orderId;
     private Long productId;
+    private String productName;
     private Integer quantity;
     private BigDecimal price;
     private List<OrderProductAddonDTO> addons;
@@ -53,5 +54,13 @@ public class OrderProductDTO {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 }

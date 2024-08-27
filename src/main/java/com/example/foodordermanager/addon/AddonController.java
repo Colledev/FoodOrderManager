@@ -4,6 +4,7 @@ import com.example.foodordermanager.addon.dto.AddonDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,7 @@ public class AddonController {
     @Autowired
     private AddonService addonService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<AddonDTO>> getAllAddons() {
         try {
@@ -33,6 +35,7 @@ public class AddonController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<List<AddonDTO>> createAddons(@RequestBody List<AddonDTO> addonDTOs) {
         try {
