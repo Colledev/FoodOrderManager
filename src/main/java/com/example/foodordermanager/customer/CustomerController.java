@@ -5,6 +5,8 @@
     import org.springframework.http.ResponseEntity;
     import org.springframework.web.bind.annotation.*;
 
+    import java.util.List;
+
     @RestController
     @RequestMapping("/api/customer")
     public class CustomerController {
@@ -32,14 +34,9 @@
         }
 
         @GetMapping("name/{name}")
-        public ResponseEntity<CustomerDTO> getCustomerByName(String name) {
-            CustomerDTO customerDTO = customerService.getCustomerByName(name);
-            return ResponseEntity.ok(customerDTO);
+        public ResponseEntity<List<CustomerDTO>> getCustomersByName(@PathVariable String name) {
+            List<CustomerDTO> customers = customerService.getCustomersByName(name);
+            return ResponseEntity.ok(customers);
         }
 
-//        @GetMapping("cpf/{cpf}")
-//        public ResponseEntity<CustomerDTO> getCustomerByCPF(String cpf) {
-//            CustomerDTO customerDTO = customerService.getCustomerByCPF(cpf);
-//            return ResponseEntity.ok(customerDTO);
-//        }
     }

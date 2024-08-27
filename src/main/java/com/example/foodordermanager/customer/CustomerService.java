@@ -4,6 +4,9 @@ import com.example.foodordermanager.customer.dto.CustomerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class CustomerService {
 
@@ -28,13 +31,11 @@ public class CustomerService {
         return CustomerMapper.mapToDTO(updatedEntity);
     }
 
-    public CustomerDTO getCustomerByName(String name) {
-        CustomerEntity customerEntity = customerRepository.findByName(name);
-        return CustomerMapper.mapToDTO(customerEntity);
+    public List<CustomerDTO> getCustomersByName(String name) {
+        List<CustomerEntity> customerEntities = customerRepository.findByNameContainingIgnoreCase(name);
+        return customerEntities.stream()
+                .map(CustomerMapper::mapToDTO)
+                .collect(Collectors.toList());
     }
 
-//    public CustomerDTO getCustomerByCPF(String CPF) {
-//        CustomerEntity customerEntity = customerRepository.findByCPF(CPF);
-//        return CustomerMapper.mapToDTO(customerEntity);
-//    }
 }
